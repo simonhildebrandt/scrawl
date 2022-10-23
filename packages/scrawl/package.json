@@ -1,0 +1,25 @@
+{
+  "name": "scrawl",
+  "version": "1.0.0",
+  "description": "Scrawl pixel art editor",
+  "main": "dist/index.js",
+  "author": "Simon Hildebrandt <simonhildebrandt@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn esbuild src/index.jsx --format=cjs --bundle --external:react --external:react-dom --outfile=dist/index.js",
+    "watch": "yarn esbuild src/index.jsx --format=cjs --bundle --external:react --external:react-dom --outfile=dist/index.js --watch"
+  },
+  "peerDependencies": {
+    "react": "^18.0",
+    "react-dom": "^18.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.18"
+  },
+  "dependencies": {
+    "react-color": "^2.19.3",
+    "react-icons": "^4.6.0",
+    "react-outside-click-handler": "^1.3.0",
+    "styled-components": "^5.3.6"
+  }
+}
