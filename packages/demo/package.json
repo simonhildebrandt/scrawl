@@ -9,7 +9,7 @@
     "serve": "live-server --port=9000 --entry-file=index.html dev/",
     "build": "yarn esbuild src/index.jsx --bundle --outfile=dev/index.js",
     "watch": "yarn esbuild src/index.jsx --bundle --outfile=dev/index.js --watch",
-    "build_prod": "yarn esbuild src/index.jsx --bundle --outfile=public/index.js"
+    "build_prod": "yarn esbuild src/index.jsx --bundle --outfile=../docs/index.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
