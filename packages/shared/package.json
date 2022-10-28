@@ -1,0 +1,27 @@
+{
+  "name": "scrawl-shared",
+  "version": "1.0.0",
+  "description": "Shared editable world based on the Scrawl pixel art editor",
+  "main": "index.js",
+  "author": "Simon Hildebrandt <simonhildebrandt@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "serve": "live-server --port=9000 --entry-file=index.html dev/",
+    "build": "yarn esbuild src/index.jsx --bundle --outfile=dev/index.js",
+    "watch": "yarn esbuild src/index.jsx --bundle --outfile=dev/index.js --watch",
+    "build_prod": "yarn esbuild src/index.jsx --bundle --outfile=../../docs/index.js"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@chakra-ui/react": "^2.3.4",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "esbuild": "^0.14.18",
+    "framer-motion": "^4",
+    "gun": "^0.2020.1238",
+    "live-server": "^1.2.1",
+    "react": "^18.0",
+    "react-dom": "^18.0",
+    "rxjs": "^7.5.7"
+  }
+}

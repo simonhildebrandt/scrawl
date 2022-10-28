@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FaUndo, FaRedo } from 'react-icons/fa';
 import Canvas from './canvas';
 import Colors from './colors';
@@ -39,18 +39,30 @@ const Controls = ({color, setColor, back, forward, canBack, canForward}) => {
 };
 
 
-export default ({callback = noop}) => {
+export default ({callback = noop, source = () => noop}) => {
   const [color, setColor] = useState('#000');
   const [stroke, setStroke] = useState({});
 
   const {
     state,
     add,
+    sync,
     back,
     forward,
     canBack,
     canForward,
   } = useHistory({}, callback);
+
+  useEffect(() => {
+    console.log({source})
+    const unsub = source(event => {
+      const { "#": location, ...data } = event;
+      console.log({event})
+      sync(data);
+    });
+    console.log({unsub});
+    return unsub;
+  }, [source]);
 
   const draw = coords => {
     const newPixels = Object.fromEntries(coords.map(coord => ([coord, color])));

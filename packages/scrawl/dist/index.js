@@ -17643,26 +17643,39 @@ function Colors({ color, setColor }) {
 
 // src/useHistory.js
 var import_react54 = require("react");
-function reducer(state, action) {
-  switch (action.type) {
-    case "add":
-      const offset = state.offset + 1;
-      const history = [...state.history.slice(0, offset), action.newState];
-      return { history, offset };
-    case "back":
-      return { ...state, offset: state.offset - 1 };
-    case "forward":
-      return { ...state, offset: state.offset + 1 };
-  }
-}
 function useHistory(initial, callback = () => {
 }) {
   const [{ history, offset }, dispatch] = (0, import_react54.useReducer)(reducer, { history: [initial], offset: 0 });
-  const state = history[offset];
-  (0, import_react54.useEffect)(() => callback(state), [state, callback]);
+  const currentState = history[offset];
+  function process2(state, action) {
+    function add(state2, action2) {
+      const offset2 = state2.offset + 1;
+      const history2 = [...state2.history.slice(0, offset2), action2.newState];
+      return { history: history2, offset: offset2 };
+    }
+    switch (action.type) {
+      case "add":
+        return add(state, action);
+      case "sync":
+        return add(state, action);
+      case "back":
+        return { ...state, offset: state.offset - 1 };
+      case "forward":
+        return { ...state, offset: state.offset + 1 };
+    }
+  }
+  function reducer(state, action) {
+    const newState = process2(state, action);
+    console.log({ action });
+    if (action.type !== "sync") {
+      callback(newState.history[newState.offset]);
+    }
+    return newState;
+  }
   return {
-    state,
+    state: currentState,
     add: (newState) => dispatch({ type: "add", newState }),
+    sync: (newState) => dispatch({ type: "sync", newState }),
     back: () => dispatch({ type: "back" }),
     forward: () => dispatch({ type: "forward" }),
     canForward: history.length - 1 > offset,
@@ -17702,17 +17715,28 @@ var Controls = ({ color, setColor, back, forward, canBack, canForward }) => {
     disabled: !canForward
   }, /* @__PURE__ */ import_react55.default.createElement(FaRedo, null))));
 };
-var editor_default = ({ callback = noop }) => {
+var editor_default = ({ callback = noop, source = () => noop }) => {
   const [color, setColor] = (0, import_react55.useState)("#000");
   const [stroke, setStroke] = (0, import_react55.useState)({});
   const {
     state,
     add,
+    sync,
     back,
     forward,
     canBack,
     canForward
   } = useHistory({}, callback);
+  (0, import_react55.useEffect)(() => {
+    console.log({ source });
+    const unsub = source((event) => {
+      const { "#": location, ...data } = event;
+      console.log({ event });
+      sync(data);
+    });
+    console.log({ unsub });
+    return unsub;
+  }, [source]);
   const draw = (coords) => {
     const newPixels = Object.fromEntries(coords.map((coord) => [coord, color]));
     setStroke({ ...stroke, ...newPixels });
