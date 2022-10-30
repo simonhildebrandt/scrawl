@@ -8,7 +8,7 @@ import { ChakraProvider, Flex, Text, Link } from '@chakra-ui/react';
 import Editor from 'scrawl';
 
 const App = () => {
-  const callback = useCallback(state => console.log({state}), []);
+  const callback = useCallback((oldState, newState) => console.log({oldState, newState}), []);
 
   return <ChakraProvider>
     <Editor callback={callback}/>

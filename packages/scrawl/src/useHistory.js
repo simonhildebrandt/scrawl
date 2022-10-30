@@ -1,13 +1,19 @@
-import { useEffect, useReducer } from 'react';
+import { useReducer } from 'react';
 
-export default function useHistory(initial, callback=() => {}) {
-  const [{history, offset}, dispatch] = useReducer(reducer, {history: [initial], offset: 0});
+import { isEqual } from 'lodash';
+
+
+const newOffset = (o, i) => String(Number(o) + i);
+
+export default function useHistory(initial = {}, callback=() => {}) {
+  const [{history, offset}, dispatch] = useReducer(reducer, {history: { 0: initial }, offset: "0"});
   const currentState = history[offset];
 
   function process(state, action) {
     function add(state, action) {
-      const offset = state.offset + 1;
-      const history = [...state.history.slice(0, offset), action.newState];
+      const offset = newOffset(state.offset, 1);
+      const nextOffset = newOffset(state.offset, 2);
+      const history = { ...state.history, [offset]: action.newState, [nextOffset]: null };
       return { history, offset };
     }
 
@@ -15,21 +21,25 @@ export default function useHistory(initial, callback=() => {}) {
       case 'add':
         return add(state, action);
       case 'sync':
-        return add(state, action);
+        if (isEqual(state.history[state.offset], action.newState)) {
+          return state;
+        } else {
+          return add(state, action);
+        }
       case 'back':
-        return { ...state, offset: state.offset - 1};
+        return { ...state, offset: newOffset(state.offset, - 1)};
       case 'forward':
-        return { ...state, offset: state.offset + 1};
+        return { ...state, offset: newOffset(state.offset, 1)};
       }
   }
 
   function reducer(state, action) {
     const newState = process(state, action);
 
-    console.log({action})
     if (action.type !== 'sync') {
-      callback(newState.history[newState.offset]);
+      callback(state.history[state.offset], newState.history[newState.offset]);
     }
+
     return newState;
   }
 
@@ -39,7 +49,7 @@ export default function useHistory(initial, callback=() => {}) {
     sync: newState => dispatch({type: 'sync', newState}),
     back: () => dispatch({type: 'back'}),
     forward: () => dispatch({type: 'forward'}),
-    canForward: (history.length - 1) > offset,
-    canBack: offset > 0
+    canForward: !!history[newOffset(offset, 1)],
+    canBack: offset != '0'
   };
 }

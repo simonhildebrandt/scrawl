@@ -39,7 +39,7 @@ const Controls = ({color, setColor, back, forward, canBack, canForward}) => {
 };
 
 
-export default ({callback = noop, source = () => noop}) => {
+export default ({initial = {}, callback = noop, source = () => noop}) => {
   const [color, setColor] = useState('#000');
   const [stroke, setStroke] = useState({});
 
@@ -51,17 +51,10 @@ export default ({callback = noop, source = () => noop}) => {
     forward,
     canBack,
     canForward,
-  } = useHistory({}, callback);
+  } = useHistory(initial, callback);
 
   useEffect(() => {
-    console.log({source})
-    const unsub = source(event => {
-      const { "#": location, ...data } = event;
-      console.log({event})
-      sync(data);
-    });
-    console.log({unsub});
-    return unsub;
+    return source(data => sync(data));
   }, [source]);
 
   const draw = coords => {

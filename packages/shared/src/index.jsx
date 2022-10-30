@@ -1,6 +1,6 @@
 import "@babel/polyfill";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { ChakraProvider, Button, ColorModeScript } from '@chakra-ui/react';
@@ -10,51 +10,49 @@ import GUN from 'gun';
 import Editor from 'scrawl';
 
 
-
 const gun = GUN();
+const db = gun.get('dbRoot');
 
-
-// gun.get(location).on((data, key) => {
-//   console.log("realtime updates:", data);
-// });
-
-// setInterval(() => { gun.get('mark').get('live').put(Math.random()) }, 9);
-
-
-// const source = () => {
-//   console.log('on');
-//   return () => console.log('off');
-// }
 
 const coords = location => `${location[0]}x${location[1]}`;
-
+const cleaned = event => {
+  const { "#": _k, ">": _l, "_": _h, ...data } = event;
+  const stripped = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != null));
+  return stripped;
+};
 
 const App = () => {
   const [location, setLocation] = useState([0, 0]);
+  const [initial, setInitial] = useState('loading');
 
-  console.log('render')
-
-  const callback = useCallback(state => {
-    console.log({state});
-    gun.get(coords(location)).put(state);
+  const callback = useCallback((oldState, newState) => {
+    const cleaned = oldState ? Object.fromEntries(Object.keys(oldState).map(key => [key, null])) : {};
+    db.get(coords(location)).put({ ...cleaned, ...newState});
   }, [location]);
 
   const source = useCallback(sub => {
-    const node = gun.get(coords(location));
-    console.log('on', {node, sub})
-    node.on(sub);
-    console.log('subbing');
+    const node = db.get(coords(location));
+    node.on(event => sub(cleaned(event)));
     return () => {
       node.off();
     }
   }, [location]);
+
+  useEffect(() => {
+    setInitial('loading');
+    const node = db.get(coords(location));
+    node.once(e => {
+      setInitial((e === null || e === undefined) ? {} : cleaned(e));
+    });
+  }, [location]);
+
 
   const advance = direction => () => {
     setLocation([location[0] + direction, 0]);
   }
 
   return <ChakraProvider>
-    <Editor callback={callback} source={source}/>
+    { initial != 'loading' && <Editor key={location} initial={initial} callback={callback} source={source}/> }
     <Button onClick={advance(-1)}>Back</Button>
     <Button onClick={advance(1)}>Forward</Button>
     {coords(location)}
