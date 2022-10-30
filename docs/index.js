@@ -73399,7 +73399,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
   var import_scrawl = __toESM(require_dist());
   var App = () => {
     const callback = (0, import_react71.useCallback)((oldState, newState) => console.log({ oldState, newState }), []);
-    return /* @__PURE__ */ import_react71.default.createElement(ChakraProvider2, null, /* @__PURE__ */ import_react71.default.createElement(import_scrawl.default, {
+    return /* @__PURE__ */ import_react71.default.createElement(ChakraProvider2, null, /* @__PURE__ */ import_react71.default.createElement(import_scrawl.Editor, {
       callback
     }), /* @__PURE__ */ import_react71.default.createElement(Flex, {
       m: "2",

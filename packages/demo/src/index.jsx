@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client';
 
 import { ChakraProvider, Flex, Text, Link } from '@chakra-ui/react';
 
-import Editor from 'scrawl';
+import { Editor } from 'scrawl';
 
 const App = () => {
   const callback = useCallback((oldState, newState) => console.log({oldState, newState}), []);
