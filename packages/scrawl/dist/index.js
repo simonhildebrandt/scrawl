@@ -15723,10 +15723,9 @@ function FaUndo(props) {
 
 // src/canvas.jsx
 var import_react3 = __toESM(require("react"));
-var PIXEL_SIZE = 20;
 var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
 function Canvas(state) {
-  const { width, height, pixels, defaultColor = "#fff", draw, commit, active } = state;
+  const { width, height, size, pixels, defaultColor = "#fff", draw, commit, active } = state;
   function onPointerUp() {
     commit();
   }
@@ -15760,19 +15759,19 @@ function Canvas(state) {
         "data-x": x2,
         "data-y": y2,
         key: getKey(coords),
-        x: x2 * PIXEL_SIZE,
-        y: y2 * PIXEL_SIZE,
+        x: x2 * size,
+        y: y2 * size,
         fill: getColor(coords),
-        width: PIXEL_SIZE,
-        height: PIXEL_SIZE
+        width: size,
+        height: size
       };
     });
   }
   const handlers = active ? { onPointerMove, onPointerUp } : {};
   return /* @__PURE__ */ import_react3.default.createElement("svg", {
     style: { touchAction: "none" },
-    width: width * PIXEL_SIZE,
-    height: height * PIXEL_SIZE,
+    width: width * size,
+    height: height * size,
     ...handlers
   }, getPixels().map((props) => /* @__PURE__ */ import_react3.default.createElement("rect", {
     ...props
@@ -23133,7 +23132,7 @@ var Controls = ({ color, setColor, back, forward, canBack, canForward }) => {
     disabled: !canForward
   }, /* @__PURE__ */ import_react55.default.createElement(FaRedo, null))));
 };
-var editor_default = ({ initial = {}, callback = noop, source = () => noop, width, height }) => {
+var editor_default = ({ initial = {}, callback = noop, source = () => noop, width, height, size }) => {
   const [color, setColor] = (0, import_react55.useState)("#000");
   const [stroke, setStroke] = (0, import_react55.useState)({});
   const {
@@ -23169,6 +23168,7 @@ var editor_default = ({ initial = {}, callback = noop, source = () => noop, widt
     canBack,
     canForward
   })), /* @__PURE__ */ import_react55.default.createElement(Wrapper, null, /* @__PURE__ */ import_react55.default.createElement(Canvas, {
+    size,
     active: true,
     width,
     height,

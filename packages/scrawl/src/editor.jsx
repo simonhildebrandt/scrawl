@@ -39,7 +39,7 @@ const Controls = ({color, setColor, back, forward, canBack, canForward}) => {
 };
 
 
-export default ({initial = {}, callback = noop, source = () => noop, width, height }) => {
+export default ({initial = {}, callback = noop, source = () => noop, width, height, size }) => {
   const [color, setColor] = useState('#000');
   const [stroke, setStroke] = useState({});
 
@@ -82,7 +82,7 @@ export default ({initial = {}, callback = noop, source = () => noop, width, heig
         />
       </Flex>
       <Wrapper>
-        <Canvas active={true} width={width} height={height} pixels={pixels} draw={draw} commit={commit}/>
+        <Canvas size={size} active={true} width={width} height={height} pixels={pixels} draw={draw} commit={commit}/>
       </Wrapper>
     </Flex>
   </Flex>
