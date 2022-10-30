@@ -49798,7 +49798,8 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
       });
       var src_exports = {};
       __export(src_exports, {
-        default: () => editor_default
+        Display: () => display_default,
+        Editor: () => editor_default
       });
       var import_react552 = __toESM3(require_react());
       var import_react210 = __toESM3(require_react());
@@ -49886,11 +49887,11 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
       var PIXEL_SIZE = 20;
       var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
       function Canvas(state2) {
-        const { width, height, pixels, defaultColor = "#fff", draw, commit } = state2;
-        function pointerUp() {
+        const { width, height, pixels, defaultColor = "#fff", draw, commit, active } = state2;
+        function onPointerUp() {
           commit();
         }
-        function pointerMove(event) {
+        function onPointerMove(event) {
           event.target.releasePointerCapture(event.pointerId);
           const {
             target: { dataset: { x: x2, y: y2 } },
@@ -49928,12 +49929,12 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
             };
           });
         }
+        const handlers = active ? { onPointerMove, onPointerUp } : {};
         return /* @__PURE__ */ import_react310.default.createElement("svg", {
           style: { touchAction: "none" },
           width: width * PIXEL_SIZE,
           height: height * PIXEL_SIZE,
-          onPointerMove: pointerMove,
-          onPointerUp: pointerUp
+          ...handlers
         }, getPixels().map((props) => /* @__PURE__ */ import_react310.default.createElement("rect", {
           ...props
         })));
@@ -56795,7 +56796,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
           disabled: !canForward
         }, /* @__PURE__ */ import_react552.default.createElement(FaRedo, null))));
       };
-      var editor_default = ({ initial = {}, callback = noop4, source = () => noop4 }) => {
+      var editor_default = ({ initial = {}, callback = noop4, source = () => noop4, width, height }) => {
         const [color3, setColor] = (0, import_react552.useState)("#000");
         const [stroke, setStroke] = (0, import_react552.useState)({});
         const {
@@ -56831,12 +56832,26 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
           canBack,
           canForward
         })), /* @__PURE__ */ import_react552.default.createElement(Wrapper, null, /* @__PURE__ */ import_react552.default.createElement(Canvas, {
-          width: 16,
-          height: 16,
+          active: true,
+          width,
+          height,
           pixels,
           draw,
           commit
         }))));
+      };
+      var import_react562 = __toESM3(require_react());
+      var display_default = ({ initial, source, ...rest }) => {
+        const [state2, setState] = (0, import_react562.useState)(initial);
+        (0, import_react562.useEffect)(() => {
+          return source((data) => {
+            setState(data);
+          });
+        }, [source]);
+        return /* @__PURE__ */ import_react562.default.createElement(Canvas, {
+          pixels: state2,
+          ...rest
+        });
       };
       module.exports = __toCommonJS(src_exports);
     }

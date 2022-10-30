@@ -15625,7 +15625,8 @@ var require_lodash = __commonJS({
 // src/index.jsx
 var src_exports = {};
 __export(src_exports, {
-  default: () => editor_default
+  Display: () => display_default,
+  Editor: () => editor_default
 });
 
 // src/editor.jsx
@@ -15725,11 +15726,11 @@ var import_react3 = __toESM(require("react"));
 var PIXEL_SIZE = 20;
 var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
 function Canvas(state) {
-  const { width, height, pixels, defaultColor = "#fff", draw, commit } = state;
-  function pointerUp() {
+  const { width, height, pixels, defaultColor = "#fff", draw, commit, active } = state;
+  function onPointerUp() {
     commit();
   }
-  function pointerMove(event) {
+  function onPointerMove(event) {
     event.target.releasePointerCapture(event.pointerId);
     const {
       target: { dataset: { x: x2, y: y2 } },
@@ -15767,12 +15768,12 @@ function Canvas(state) {
       };
     });
   }
+  const handlers = active ? { onPointerMove, onPointerUp } : {};
   return /* @__PURE__ */ import_react3.default.createElement("svg", {
     style: { touchAction: "none" },
     width: width * PIXEL_SIZE,
     height: height * PIXEL_SIZE,
-    onPointerMove: pointerMove,
-    onPointerUp: pointerUp
+    ...handlers
   }, getPixels().map((props) => /* @__PURE__ */ import_react3.default.createElement("rect", {
     ...props
   })));
@@ -23132,7 +23133,7 @@ var Controls = ({ color, setColor, back, forward, canBack, canForward }) => {
     disabled: !canForward
   }, /* @__PURE__ */ import_react55.default.createElement(FaRedo, null))));
 };
-var editor_default = ({ initial = {}, callback = noop, source = () => noop }) => {
+var editor_default = ({ initial = {}, callback = noop, source = () => noop, width, height }) => {
   const [color, setColor] = (0, import_react55.useState)("#000");
   const [stroke, setStroke] = (0, import_react55.useState)({});
   const {
@@ -23168,12 +23169,28 @@ var editor_default = ({ initial = {}, callback = noop, source = () => noop }) =>
     canBack,
     canForward
   })), /* @__PURE__ */ import_react55.default.createElement(Wrapper, null, /* @__PURE__ */ import_react55.default.createElement(Canvas, {
-    width: 16,
-    height: 16,
+    active: true,
+    width,
+    height,
     pixels,
     draw,
     commit
   }))));
+};
+
+// src/display.jsx
+var import_react56 = __toESM(require("react"));
+var display_default = ({ initial, source, ...rest }) => {
+  const [state, setState] = (0, import_react56.useState)(initial);
+  (0, import_react56.useEffect)(() => {
+    return source((data) => {
+      setState(data);
+    });
+  }, [source]);
+  return /* @__PURE__ */ import_react56.default.createElement(Canvas, {
+    pixels: state,
+    ...rest
+  });
 };
 module.exports = __toCommonJS(src_exports);
 /*

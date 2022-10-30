@@ -6,13 +6,13 @@ const getKey = ({x, y}) => `${x}-${y}`;
 
 
 export default function Canvas(state) {
-  const { width, height, pixels, defaultColor = '#fff', draw, commit } = state;
+  const { width, height, pixels, defaultColor = '#fff', draw, commit, active } = state;
 
-  function pointerUp() {
+  function onPointerUp() {
     commit();
   }
 
-  function pointerMove(event) {
+  function onPointerMove(event) {
     event.target.releasePointerCapture(event.pointerId);
 
     const {
@@ -56,11 +56,12 @@ export default function Canvas(state) {
     })
   }
 
+  const handlers = active ? { onPointerMove, onPointerUp } : {};
+
   return <svg style={{touchAction: 'none'}}
     width={width*PIXEL_SIZE}
     height={height*PIXEL_SIZE}
-    onPointerMove={pointerMove}
-    onPointerUp={pointerUp}
+    {...handlers}
   >
     { getPixels().map( props => <rect {...props}/>)}
   </svg>
