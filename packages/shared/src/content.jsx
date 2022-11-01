@@ -7,10 +7,10 @@ import useKeyCodeListener from './useKeyCodeListener';
 
 
 const keycodes = {
-  ArrowLeft: [1, 0],
-  ArrowUp: [0, 1],
-  ArrowRight: [-1, 0],
-  ArrowDown: [0, -1]
+  ArrowLeft: [-1, 0],
+  ArrowUp: [0, -1],
+  ArrowRight: [1, 0],
+  ArrowDown: [0, 1]
 }
 
 export default ({rect, scale}) => {

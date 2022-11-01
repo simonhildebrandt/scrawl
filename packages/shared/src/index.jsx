@@ -22,7 +22,7 @@ const App = () => {
   return <ChakraProvider>
     <Flex width="100%" height="100%" overflow="hidden" position="relative" ref={target}>
       { rect && <Content rect={rect} scale={scale}/> }
-      <Flex position="absolute" right={0} bottom={0} fontSize={32}>
+      <Flex position="absolute" right={0} bottom={0} fontSize={32} color="black">
         <HiMagnifyingGlass onClick={() => setScale(DEFAULT_SCALE)}/>
         <HiMagnifyingGlassMinus onClick={rescale(.8)}/>
         <HiMagnifyingGlassPlus onClick={rescale(1.2)}/>

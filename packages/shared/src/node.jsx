@@ -10,7 +10,8 @@ import { Editor, Display } from 'scrawl';
 import { dimensions } from './utils';
 
 
-const gun = GUN(['http://127.0.0.1:8765/gun']);
+// const gun = GUN(['http://127.0.0.1:8765/gun', 'http://45.77.155.191:8765/gun']);
+const gun = GUN(['http://45.77.155.191:8765/gun']);
 const db = gun.get('dbRoot');
 
 
@@ -70,7 +71,7 @@ export default ({location, active, onSelect, scale}) => {
     </OutsideClickHandler>
   } else {
     return <Flex position="relative" onClick={() => onSelect(location)} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      { hovering && <Box position="absolute">{location}</Box> }
+      { hovering && <Box padding={1} position="absolute" bgColor="gray.200">{location}</Box> }
       <Display initial={initial} source={source} {...dimensions} scale={scale}/>
       <Flex bgColor={hovering ? "#0001" : "#0000"} boxSizing="border-box" position="absolute" width="100%" height="100%"></Flex>
     </Flex>
