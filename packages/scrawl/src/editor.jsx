@@ -24,7 +24,6 @@ const SubPalette = styled(Flex)`
 `;
 
 const Controls = ({color, setColor, back, forward, canBack, canForward}) => {
-
   return <Flex position="relative" align="center" justify="space-between" width="100%">
     <Colors color={color} setColor={setColor}/>
     <SubPalette>
@@ -39,7 +38,7 @@ const Controls = ({color, setColor, back, forward, canBack, canForward}) => {
 };
 
 
-export default ({initial = {}, callback = noop, source = () => noop, width, height, size }) => {
+export default ({initial = {}, callback = noop, source = () => noop, width, height, scale }) => {
   const [color, setColor] = useState('#000');
   const [stroke, setStroke] = useState({});
 
@@ -69,7 +68,7 @@ export default ({initial = {}, callback = noop, source = () => noop, width, heig
 
   const pixels = {...state, ...stroke};
 
-  return <Flex padding={8}>
+  return <Flex>
     <Flex flexDir="column">
       <Flex>
         <Controls
@@ -82,7 +81,7 @@ export default ({initial = {}, callback = noop, source = () => noop, width, heig
         />
       </Flex>
       <Wrapper>
-        <Canvas size={size} active={true} width={width} height={height} pixels={pixels} draw={draw} commit={commit}/>
+        <Canvas scale={scale} active={true} width={width} height={height} pixels={pixels} draw={draw} commit={commit}/>
       </Wrapper>
     </Flex>
   </Flex>

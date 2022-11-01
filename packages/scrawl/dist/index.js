@@ -15725,7 +15725,7 @@ function FaUndo(props) {
 var import_react3 = __toESM(require("react"));
 var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
 function Canvas(state) {
-  const { width, height, size, pixels, defaultColor = "#fff", draw, commit, active } = state;
+  const { width, height, scale, pixels, defaultColor = "#fff", draw, commit, active } = state;
   function onPointerUp() {
     commit();
   }
@@ -15759,19 +15759,19 @@ function Canvas(state) {
         "data-x": x2,
         "data-y": y2,
         key: getKey(coords),
-        x: x2 * size,
-        y: y2 * size,
+        x: x2 * scale,
+        y: y2 * scale,
         fill: getColor(coords),
-        width: size,
-        height: size
+        width: scale,
+        height: scale
       };
     });
   }
   const handlers = active ? { onPointerMove, onPointerUp } : {};
   return /* @__PURE__ */ import_react3.default.createElement("svg", {
     style: { touchAction: "none" },
-    width: width * size,
-    height: height * size,
+    width: width * scale,
+    height: height * scale,
     ...handlers
   }, getPixels().map((props) => /* @__PURE__ */ import_react3.default.createElement("rect", {
     ...props
@@ -23132,7 +23132,7 @@ var Controls = ({ color, setColor, back, forward, canBack, canForward }) => {
     disabled: !canForward
   }, /* @__PURE__ */ import_react55.default.createElement(FaRedo, null))));
 };
-var editor_default = ({ initial = {}, callback = noop, source = () => noop, width, height, size }) => {
+var editor_default = ({ initial = {}, callback = noop, source = () => noop, width, height, scale }) => {
   const [color, setColor] = (0, import_react55.useState)("#000");
   const [stroke, setStroke] = (0, import_react55.useState)({});
   const {
@@ -23156,9 +23156,7 @@ var editor_default = ({ initial = {}, callback = noop, source = () => noop, widt
     setStroke({});
   };
   const pixels = { ...state, ...stroke };
-  return /* @__PURE__ */ import_react55.default.createElement(Flex, {
-    padding: 8
-  }, /* @__PURE__ */ import_react55.default.createElement(Flex, {
+  return /* @__PURE__ */ import_react55.default.createElement(Flex, null, /* @__PURE__ */ import_react55.default.createElement(Flex, {
     flexDir: "column"
   }, /* @__PURE__ */ import_react55.default.createElement(Flex, null, /* @__PURE__ */ import_react55.default.createElement(Controls, {
     color,
@@ -23168,7 +23166,7 @@ var editor_default = ({ initial = {}, callback = noop, source = () => noop, widt
     canBack,
     canForward
   })), /* @__PURE__ */ import_react55.default.createElement(Wrapper, null, /* @__PURE__ */ import_react55.default.createElement(Canvas, {
-    size,
+    scale,
     active: true,
     width,
     height,

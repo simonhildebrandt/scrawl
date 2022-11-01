@@ -1,12 +1,10 @@
 import React from 'react';
 
-const PIXEL_SIZE = 20;
-
 const getKey = ({x, y}) => `${x}-${y}`;
 
 
 export default function Canvas(state) {
-  const { width, height, size, pixels, defaultColor = '#fff', draw, commit, active } = state;
+  const { width, height, scale, pixels, defaultColor = '#fff', draw, commit, active } = state;
 
   function onPointerUp() {
     commit();
@@ -47,11 +45,11 @@ export default function Canvas(state) {
         "data-x": x,
         "data-y": y,
         key: getKey(coords),
-        x: x * size,
-        y: y * size,
+        x: x * scale,
+        y: y * scale,
         fill: getColor(coords),
-        width: size,
-        height: size,
+        width: scale,
+        height: scale,
       }
     })
   }
@@ -59,8 +57,8 @@ export default function Canvas(state) {
   const handlers = active ? { onPointerMove, onPointerUp } : {};
 
   return <svg style={{touchAction: 'none'}}
-    width={width*size}
-    height={height*size}
+    width={width*scale}
+    height={height*scale}
     {...handlers}
   >
     { getPixels().map( props => <rect {...props}/>)}
