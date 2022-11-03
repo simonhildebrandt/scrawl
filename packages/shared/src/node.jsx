@@ -11,7 +11,7 @@ import { dimensions } from './utils';
 
 
 // const gun = GUN(['http://127.0.0.1:8765/gun', 'http://45.77.155.191:8765/gun']);
-const gun = GUN(['http://45.77.155.191:8765/gun']);
+const gun = GUN(['https://scrawl-server.requisite.link:9876/gun']);
 const db = gun.get('dbRoot');
 
 
