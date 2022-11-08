@@ -61,8 +61,9 @@ export default ({initial = {}, callback = noop, source = () => noop, width, heig
     setStroke({...stroke, ...newPixels});
   };
 
-  const commit = () => {
-    add({...state, ...stroke});
+  const commit = (coords = []) => {
+    const newPixels = Object.fromEntries(coords.map(coord => ([coord, color])));
+    add({...state, ...stroke, ...newPixels});
     setStroke({});
   };
 

@@ -15726,8 +15726,11 @@ var import_react3 = __toESM(require("react"));
 var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
 function Canvas(state) {
   const { width, height, scale, pixels, defaultColor = "#fff", draw, commit, active } = state;
-  function onPointerUp() {
-    commit();
+  function onPointerUp(event) {
+    const {
+      target: { dataset: { x: x2, y: y2 } }
+    } = event;
+    commit([getKey({ x: x2, y: y2 })]);
   }
   function onPointerMove(event) {
     event.target.releasePointerCapture(event.pointerId);
@@ -23151,8 +23154,9 @@ var editor_default = ({ initial = {}, callback = noop, source = () => noop, widt
     const newPixels = Object.fromEntries(coords.map((coord) => [coord, color]));
     setStroke({ ...stroke, ...newPixels });
   };
-  const commit = () => {
-    add({ ...state, ...stroke });
+  const commit = (coords = []) => {
+    const newPixels = Object.fromEntries(coords.map((coord) => [coord, color]));
+    add({ ...state, ...stroke, ...newPixels });
     setStroke({});
   };
   const pixels = { ...state, ...stroke };

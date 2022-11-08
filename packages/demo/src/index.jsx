@@ -11,7 +11,7 @@ const App = () => {
   const callback = useCallback((oldState, newState) => console.log({oldState, newState}), []);
 
   return <ChakraProvider>
-    <Editor callback={callback} width={16} height={16}/>
+    <Editor callback={callback} width={16} height={16} scale={16}/>
 
     <Flex m="2" fontSize="lg" gap={2} flexDir="column">
     <Text>Scrawl Pixel Editor by <Link color="green" href="https://simonhildebrandt">Simon Hildebrandt</Link>.</Text>

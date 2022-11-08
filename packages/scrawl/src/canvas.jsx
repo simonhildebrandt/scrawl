@@ -6,8 +6,13 @@ const getKey = ({x, y}) => `${x}-${y}`;
 export default function Canvas(state) {
   const { width, height, scale, pixels, defaultColor = '#fff', draw, commit, active } = state;
 
-  function onPointerUp() {
-    commit();
+  function onPointerUp(event) {
+
+    const {
+      target: {dataset: { x, y }}
+    } = event;
+
+    commit([getKey({x, y})]);
   }
 
   function onPointerMove(event) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CompactPicker } from 'react-color';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { MdInvertColors } from 'react-icons/md';
+// import { MdInvertColors } from 'react-icons/md';
 
 import { styled, Box, Flex } from './styled';
 

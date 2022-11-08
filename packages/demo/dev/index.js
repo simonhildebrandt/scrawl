@@ -49884,12 +49884,14 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
         return GenIcon({ "tag": "svg", "attr": { "viewBox": "0 0 512 512" }, "child": [{ "tag": "path", "attr": { "d": "M212.333 224.333H12c-6.627 0-12-5.373-12-12V12C0 5.373 5.373 0 12 0h48c6.627 0 12 5.373 12 12v78.112C117.773 39.279 184.26 7.47 258.175 8.007c136.906.994 246.448 111.623 246.157 248.532C504.041 393.258 393.12 504 256.333 504c-64.089 0-122.496-24.313-166.51-64.215-5.099-4.622-5.334-12.554-.467-17.42l33.967-33.967c4.474-4.474 11.662-4.717 16.401-.525C170.76 415.336 211.58 432 256.333 432c97.268 0 176-78.716 176-176 0-97.267-78.716-176-176-176-58.496 0-110.28 28.476-142.274 72.333h98.274c6.627 0 12 5.373 12 12v48c0 6.627-5.373 12-12 12z" } }] })(props);
       }
       var import_react310 = __toESM3(require_react());
-      var PIXEL_SIZE = 20;
       var getKey = ({ x: x2, y: y2 }) => `${x2}-${y2}`;
       function Canvas(state2) {
-        const { width, height, pixels, defaultColor = "#fff", draw, commit, active } = state2;
-        function onPointerUp() {
-          commit();
+        const { width, height, scale: scale2, pixels, defaultColor = "#fff", draw, commit, active } = state2;
+        function onPointerUp(event) {
+          const {
+            target: { dataset: { x: x2, y: y2 } }
+          } = event;
+          commit([getKey({ x: x2, y: y2 })]);
         }
         function onPointerMove(event) {
           event.target.releasePointerCapture(event.pointerId);
@@ -49921,19 +49923,19 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
               "data-x": x2,
               "data-y": y2,
               key: getKey(coords),
-              x: x2 * PIXEL_SIZE,
-              y: y2 * PIXEL_SIZE,
+              x: x2 * scale2,
+              y: y2 * scale2,
               fill: getColor2(coords),
-              width: PIXEL_SIZE,
-              height: PIXEL_SIZE
+              width: scale2,
+              height: scale2
             };
           });
         }
         const handlers = active ? { onPointerMove, onPointerUp } : {};
         return /* @__PURE__ */ import_react310.default.createElement("svg", {
           style: { touchAction: "none" },
-          width: width * PIXEL_SIZE,
-          height: height * PIXEL_SIZE,
+          width: width * scale2,
+          height: height * scale2,
           ...handlers
         }, getPixels().map((props) => /* @__PURE__ */ import_react310.default.createElement("rect", {
           ...props
@@ -56796,7 +56798,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
           disabled: !canForward
         }, /* @__PURE__ */ import_react552.default.createElement(FaRedo, null))));
       };
-      var editor_default = ({ initial = {}, callback = noop4, source = () => noop4, width, height }) => {
+      var editor_default = ({ initial = {}, callback = noop4, source = () => noop4, width, height, scale: scale2 }) => {
         const [color3, setColor] = (0, import_react552.useState)("#000");
         const [stroke, setStroke] = (0, import_react552.useState)({});
         const {
@@ -56815,14 +56817,13 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
           const newPixels = Object.fromEntries(coords.map((coord) => [coord, color3]));
           setStroke({ ...stroke, ...newPixels });
         };
-        const commit = () => {
-          add3({ ...state2, ...stroke });
+        const commit = (coords = []) => {
+          const newPixels = Object.fromEntries(coords.map((coord) => [coord, color3]));
+          add3({ ...state2, ...stroke, ...newPixels });
           setStroke({});
         };
         const pixels = { ...state2, ...stroke };
-        return /* @__PURE__ */ import_react552.default.createElement(Flex3, {
-          padding: 8
-        }, /* @__PURE__ */ import_react552.default.createElement(Flex3, {
+        return /* @__PURE__ */ import_react552.default.createElement(Flex3, null, /* @__PURE__ */ import_react552.default.createElement(Flex3, {
           flexDir: "column"
         }, /* @__PURE__ */ import_react552.default.createElement(Flex3, null, /* @__PURE__ */ import_react552.default.createElement(Controls, {
           color: color3,
@@ -56832,6 +56833,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
           canBack,
           canForward
         })), /* @__PURE__ */ import_react552.default.createElement(Wrapper, null, /* @__PURE__ */ import_react552.default.createElement(Canvas, {
+          scale: scale2,
           active: true,
           width,
           height,
@@ -73402,7 +73404,8 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_liter
     return /* @__PURE__ */ import_react71.default.createElement(ChakraProvider2, null, /* @__PURE__ */ import_react71.default.createElement(import_scrawl.Editor, {
       callback,
       width: 16,
-      height: 16
+      height: 16,
+      scale: 16
     }), /* @__PURE__ */ import_react71.default.createElement(Flex, {
       m: "2",
       fontSize: "lg",
