@@ -7,7 +7,6 @@ export default function Canvas(state) {
   const { width, height, scale, pixels, defaultColor = '#fff', draw, commit, active } = state;
 
   function onPointerUp(event) {
-
     const {
       target: {dataset: { x, y }}
     } = event;
